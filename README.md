@@ -1,196 +1,85 @@
-Titanic Dataset Analysis
-The Titanic dataset is a well-known dataset for exploring machine learning concepts. It includes information about passengers on the RMS Titanic, and the goal is often to predict whether a given passenger survived the shipwreck.
+# Titanic Dataset Analysis
 
-1. Importing the Dataset
-python
-Copy
-Edit
-# Importing Pandas Library
-import pandas as pd
+## 1. Source of Data
+The Titanic dataset is sourced from the [Kaggle Titanic - Machine Learning from Disaster competition](https://www.kaggle.com/c/titanic). It contains demographic and survival data of 891 passengers aboard the RMS Titanic. This dataset is widely used for educational purposes to introduce exploratory data analysis and machine learning concepts.
 
-# Loading Data
-titanic = pd.read_csv('https://raw.githubusercontent.com/eclarson/DataMiningNotebooks/master/data/titanic.csv')
-2. Basic Data Operations
-Viewing the Dataset
-By default:
+---
 
-python
-Copy
-Edit
-titanic
-By slicing:
+## 2. Description
+The Titanic dataset provides detailed information about the passengers aboard the ill-fated RMS Titanic. The objective of this project is to explore the dataset, understand patterns, and predict passenger survival based on key features using machine learning techniques.
 
-python
-Copy
-Edit
-titanic[:10]
-Using head():
+---
 
-python
-Copy
-Edit
-titanic.head()  # Default is 5 rows
-titanic.head(10)  # View top 10 rows
-Using iloc[]:
+## 3. Hypothesis
+Certain features, such as passenger class, age, gender, and ticket fare, significantly influenced survival rates during the Titanic disaster.
+1. **Gender Hypothesis**: Female passengers are more likely to survive than male passengers, as evacuation protocols historically prioritized women and children.  
+2. **Age Hypothesis**: Younger passengers, particularly children, are more likely to survive due to evacuation priorities.  
 
-python
-Copy
-Edit
-titanic.iloc[:10]
-Viewing specific columns:
+---
 
-python
-Copy
-Edit
-titanic[['PassengerId', 'Survived', 'Name']].head(10)
-Basic Statistics
-Summary statistics:
+## 4. Method and Procedure
+1. **Data Import and Preprocessing**:
+   - Import the Titanic dataset from a publicly available repository.
+   - Inspect, clean, and preprocess the data, including handling missing values and categorical encoding.
 
-python
-Copy
-Edit
-titanic.describe()
-Mean of age:
+2. **Exploratory Data Analysis (EDA)**:
+   - Visualize and analyze key trends and patterns, such as survival rates by gender, age, and class.
 
-python
-Copy
-Edit
-titanic['Age'].mean()
-Median:
+3. **Feature Engineering**:
+   - Extract and engineer features for predictive modeling.
 
-python
-Copy
-Edit
-titanic.median(numeric_only=True)
-Mode:
+4. **Model Building and Evaluation**:
+   - Use machine learning algorithms (e.g., Logistic Regression, Decision Trees) to predict survival.
+   - Evaluate model performance using metrics like accuracy, precision, and recall.
 
-python
-Copy
-Edit
-titanic.mode(axis=0)
-Count:
+5. **Visualization**:
+   - Use libraries like `matplotlib` and `seaborn` to create insightful plots.
 
-python
-Copy
-Edit
-titanic.count()
-Maximum and minimum values:
+---
 
-python
-Copy
-Edit
-titanic.max(numeric_only=True)
-titanic.min(numeric_only=True)
-Dataset size:
+## 5. Results
+- **Key Findings**:
+  - Female passengers had a higher likelihood of survival compared to males.
+  - Younger passengers, particularly children, had higher survival rates.
 
-python
-Copy
-Edit
-titanic.size
-Shape:
+---
 
-python
-Copy
-Edit
-titanic.shape
-Number of dimensions:
+## 6. Pre-Requisite and System Requirements
+### Pre-Requisites:
+- Python 3.x
+- Libraries: `pandas`, `numpy`, `matplotlib`
 
-python
-Copy
-Edit
-titanic.ndim
-Column data types:
+### System Requirements:
+- OS: Windows/Linux/Mac
+- RAM: 4GB minimum
+- Python environment (Anaconda, Google Colab, or Jupyter Notebook)
 
-python
-Copy
-Edit
-titanic.dtypes
-3. Cleaning and Transforming the Dataset
-Handling Missing Values
-Dropping rows with missing Embarked values:
+---
 
-python
-Copy
-Edit
-titanic = titanic.dropna(subset=['Embarked'])
-Dropping the Cabin column due to extensive missing values:
+## 7. How to Run the File
+### Using Google Colab:
+1. Open [Google Colab](https://colab.research.google.com).
+2. Upload the `.ipynb` file or use the link to the notebook repository.
+3. Run each cell sequentially.
 
-python
-Copy
-Edit
-titanic.drop('Cabin', inplace=True, axis=1)
-Handling missing Age:
+### Using Jupyter Notebook:
+1. Install Jupyter Notebook: `pip install notebook`.
+2. Navigate to the project directory: `cd /path/to/project`.
+3. Launch Jupyter Notebook: `jupyter notebook`.
+4. Open the Titanic Analysis notebook and execute cells sequentially.
 
-Dataset 1: Drop rows with missing Age.
-python
-Copy
-Edit
-titanic_age = titanic.dropna()
-Dataset 2: Impute missing Age with the median value.
-python
-Copy
-Edit
-from sklearn.impute import SimpleImputer
-imr = SimpleImputer(missing_values=np.nan, strategy='median')
-imr = imr.fit(titanic)
-titanic_imputed = imr.transform(titanic.values)
-Dropping Irrelevant Columns
-Columns such as PassengerId, Name, Ticket, and Fare are irrelevant for analysis:
+---
 
-python
-Copy
-Edit
-titanic_imputed = titanic.drop(['PassengerId', 'Name', 'Ticket', 'Fare'], axis=1)
-titanic_age = titanic_age.drop(['PassengerId', 'Name', 'Ticket', 'Fare'], axis=1)
-Encoding Categorical Data
-One-hot encode Sex and Embarked columns:
+## 8. Future Studies
+- Explore deep learning models for survival prediction.
+- Analyze additional datasets related to maritime disasters for comparative studies.
+- Perform time-series analysis to simulate evacuation procedures and survival outcomes.
 
-python
-Copy
-Edit
-titanic_imputed = pd.get_dummies(titanic_imputed, columns=['Sex', 'Embarked'])
-4. Exploratory Data Analysis and Hypothesis Testing
-Hypothesis:
-Women and children were given evacuation priority, so we expect more female survivors and child survivors among males.
+---
 
-Testing with Dataset 1
-Female and Male Survivors:
-python
-Copy
-Edit
-Test1 = titanic_age.groupby(['Survived'])
-Test2 = Test1.get_group(1)  # Survivors
+## 9. Reach Out
+If you have questions, suggestions, or need assistance, feel free to reach out:
 
-Female = Test2['Sex'].value_counts()['female']
-Male = Test2['Sex'].value_counts()['male']
-
-print(f"Number of Female Passengers That Survived: {Female}")
-print(f"Number of Male Passengers That Survived: {Male}")
-Male Child Survivors:
-python
-Copy
-Edit
-Test3 = Test2[Test2['Sex'] == 'male']
-Test4 = Test3[Test3['Age'] <= 18.0]
-
-Child_Survivors = Test4.count()
-print(f"Number of Male Child Passengers That Survived: {Child_Survivors}")
-Testing with Dataset 2
-Female and Male Survivors:
-python
-Copy
-Edit
-Test_Imp_1 = titanic_imputed_df.groupby(['Survived'])
-Test_Imp_2 = Test_Imp_1.get_group(1)
-
-Female = int(Test_Imp_2['Sex_female'].sum())
-Male = int(Test_Imp_2['Sex_male'].sum())
-
-print(f"Number of Female Passengers That Survived: {Female}")
-print(f"Number of Male Passengers That Survived: {Male}")
-5. Conclusion
-Out of the total survivors, the majority were women, supporting the hypothesis that women were prioritized during evacuation.
-Among male survivors, children had a higher survival rate compared to adult males.
-Dataset 1 and Dataset 2 both confirm the hypothesis, showcasing the importance of exploratory data analysis and preprocessing in understanding dataset patterns.
-
-This is a concise version of your Titanic analysis workflow. Let me know if you want any further explanations or visualizations!
+- **Email**: aniketddbharthi@gmail.com  
+- **GitHub**: [Leisure-Codes](https://github.com/Leisure-Codes)  
+- **LinkedIn**: [Aniket Bharthi](https://linkedin.com/in/aniketbharthi)
